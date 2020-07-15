@@ -5,6 +5,7 @@ https://www.codewars.com/kata/5202ef17a402dd033c000009
 
 namespace KataTest
 {
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System.Collections.Generic;
 
     public class Kata
@@ -12,8 +13,14 @@ namespace KataTest
         public static string TitleCase(string title, string minorWords = "")
         {
             var words = title.ToLower().Split(' ');
+
+            var minorWordsSet = new HashSet<string>();
+            if(!string.IsNullOrEmpty(minorWords)) minorWordsSet = new HashSet<string>(minorWords.Split(' '));
+
             for (var i = 0; i < words.Length; i++)
             {
+                if (i > 0 && minorWordsSet.Contains(words[i])) continue;
+
                 words[i] = ToTitleWord(words[i]);
             }
 
@@ -65,6 +72,12 @@ namespace KataTest
         public void Test100FirstRule()
         {
             Assert.AreEqual(Kata.TitleCase(testString1), "A Clash Of Kings");
+        }
+
+        [TestMethod]
+        public void Test101FirstRuleWithMinorWords()
+        {
+            Assert.AreEqual(Kata.TitleCase(testString1, minorWords1), "A Clash of Kings");
         }
     }
 }
