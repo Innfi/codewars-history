@@ -13,6 +13,33 @@ namespace KataTest
     {
         public static string TitleCase(string title, string minorWords = "")
         {
+            var minorWordsSet = new HashSet<string>();
+            if (!string.IsNullOrEmpty(minorWords)) minorWordsSet =
+                     new HashSet<string>(minorWords.ToLower().Split(' '));
+
+            return string.Join(" ", title.ToLower().Split(' ')
+                .Select((x, index) => ToTitleWord(x, index, minorWordsSet)).ToArray());
+        }
+
+        public static string ToTitleWord(string word, int index, HashSet<string> minorWords)
+        {
+            if (index > 0 && minorWords.Contains(word)) return word;
+
+            return ToTitleWord(word);
+        }
+
+        public static string ToTitleWord(string word)
+        {
+            if (string.IsNullOrEmpty(word)) return word;
+
+            return word[0].ToString().ToUpper() + word.Substring(1);
+        }
+    }
+
+    public class KataOld
+    {
+        public static string TitleCase(string title, string minorWords = "")
+        {
             if (string.IsNullOrEmpty(title)) return title;
 
             var words = title.ToLower().Split(' ');
@@ -36,15 +63,7 @@ namespace KataTest
             if (string.IsNullOrEmpty(word)) return word;
 
             return word[0].ToString().ToUpper() + word.Substring(1);
-        }
-
-        public static string ToTitleWord(string word, int index, HashSet<string> minorWords)
-        {
-            if (string.IsNullOrEmpty(word)) return word;
-            if (index > 0 && minorWords.Contains(word)) return word;
-
-            return word[0].ToString().ToUpper() + word.Substring(1);
-        }
+        }        
     }
 
     [TestClass]
