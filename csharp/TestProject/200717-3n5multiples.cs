@@ -1,8 +1,20 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-/*
+﻿/*
  https://www.codewars.com/kata/514b92a657cdc65150000006
+
+one of the optimal solutions:
+
+    using System.Linq;
+public static class Kata
+{
+  public static int Solution(int n)
+  {
+    return Enumerable.Range(0, n).Where(e => e % 3 == 0 || e % 5 == 0).Sum();
+  }
+}
+
 */
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
 namespace KataTest
@@ -11,12 +23,8 @@ namespace KataTest
     {
         public static int Solution(int value)
         {
-            var sum = 0;
-
-            sum += ToMultiplierSum(3, value);
-            sum += ToMultiplierSum(5, value);
-
-            return sum;
+            return ToMultiplierSum(3, value) + ToMultiplierSum(5, value)
+                - ToMultiplierSum(15, value);
         }
 
         public static int ToMultiplierSum(int multiplier, int value)
