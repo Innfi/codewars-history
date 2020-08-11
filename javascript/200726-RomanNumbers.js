@@ -5,30 +5,47 @@
 
 const assert = require('assert');
 
+const arabicDict = {
+    1000: 'M',
+    900: 'CM',
+    500: 'D',
+    400: 'CD',
+    100: 'C',
+    90: 'XC',
+    50: 'L',
+    40: 'XL',
+    10: 'X',
+    9: 'IX',
+    5: 'V',
+    4: 'IV',
+    1: 'I',
+};
+
+const arabicArray = Object.keys(arabicDict);
+
 class RomanNumerals {
     static toRoman = (arabic) => {
-        return this.toRomanUnder10(arabic);
+        let roman = "";
+        let currentIndex = 0;
+
+        while(arabic > 0 && (currentIndex < arabicArray.length)) {
+            let arabicNumber = arabicArray[currentIndex];
+            let currentSymbol = arabicDict[arabicNumber];
+
+            if(arabicNumber <= arabic) {
+                roman += currentSymbol;
+                arabic -= arabicNumber;
+            } else {
+                currentIndex += 1;
+            }
+        }
+       
+        return roman;
     }
 
-    static toRomanUnder10 = (arabic) => {
-        if(arabic < 4) return this.toRomanSequence1(arabic);
-        if(arabic <= 8) return this.toRomanSeqence5(arabic);
-        return this.toRomanSeqence10(arabic);
-    }
-
-    static toRomanSequence1 = (arabic) => {
-        return 'I'.repeat(arabic);
-    }
-
-    static toRomanSeqence5 = (arabic) => {
-        if(arabic -5 == -1) return 'IV';
-        return 'V' + this.toRomanSequence1(arabic -5);
-    }
-
-    static toRomanSeqence10 = (arabic) => {
-        //FIXME
-        return 'IX';
-    }
+    //static toArabic = (roman) => {
+    //    
+    //}
 }
 
 describe('Testing Roman number converter class', () => {
@@ -45,15 +62,23 @@ describe('Testing Roman number converter class', () => {
         assert.equal(RomanNumerals.toRoman(9), 'IX');
     });
 
-    //it('tests arabic to roman', () => {
-    //    assert.equal(RomanNumerals.toRoman(1000), 'M')
-    //    assert.equal(RomanNumerals.toRoman(999), "CMXCIX")
-    //    assert.equal(RomanNumerals.toRoman(4), 'IV')
-    //    assert.equal(RomanNumerals.toRoman(1), 'I')
-    //    assert.equal(RomanNumerals.toRoman(1991), 'MCMXCI')
-    //    assert.equal(RomanNumerals.toRoman(2006), 'MMVI')
-    //    assert.equal(RomanNumerals.toRoman(2020), 'MMXX')
-    //});
+    it('tests dictionary', () => {
+        var dict = {};
+        dict[1] = 'I';
+        dict[5] = 'V';
+
+        assert.equal(dict[1], 'I');
+    });
+
+    it('tests arabic to roman', () => {
+        assert.equal(RomanNumerals.toRoman(1000), 'M')
+        assert.equal(RomanNumerals.toRoman(999), "CMXCIX")
+        assert.equal(RomanNumerals.toRoman(4), 'IV')
+        assert.equal(RomanNumerals.toRoman(1), 'I')
+        assert.equal(RomanNumerals.toRoman(1991), 'MCMXCI')
+        assert.equal(RomanNumerals.toRoman(2006), 'MMVI')
+        assert.equal(RomanNumerals.toRoman(2020), 'MMXX')
+    });
 
     //it('tests roman to arabic', () => {
     //    assert.equal(RomanNumerals.fromRoman('XXI'), 21)
