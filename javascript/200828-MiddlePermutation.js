@@ -6,7 +6,31 @@ const assert = require('assert');
 
 
 const middlePermutation = (input) => {
-    const permLen = toPermLen(input);
+    const sortedInput = input.split('').sort().join('');
+    const { start, remain } = toCenterString(sortedInput);
+
+    if(sortedInput.length % 2 === 0) {
+        return start + remain.split('').reverse().join('');
+    }
+
+    return start + middlePermutation(remain);
+};
+
+const toCenterString = (input) => {
+    const startLetter = input[toMiddleIndex(input)];
+    const remainString = input.replace(startLetter, '');
+
+    return {
+        start: startLetter,
+        remain: remainString
+    };
+};
+
+const toMiddleIndex = (input) => {
+    const halfLen = parseInt(input.length / 2);
+    if(input.length % 2 === 1) return halfLen;
+
+    return halfLen-1;
 };
 
 const toPermLen = (input) => {
@@ -15,23 +39,6 @@ const toPermLen = (input) => {
     while(length > 1) permLen *= length--;
 
     return permLen;
-};
-
-const toCenterString = (input) => {
-    const startLetter = input[toMiddleIndex(input)];
-    const remain = input.replace(startLetter, '');
-
-    console.log('start: ', startLetter);
-    console.log('remain: ', remain);
-
-    return startLetter + remain;
-};
-
-const toMiddleIndex = (input) => {
-    const halfLen = parseInt(input.length / 2);
-    if(input.length % 2 === 1) return halfLen;
-
-    return halfLen-1;
 };
 
 describe('Building Blocks', () => {
@@ -53,19 +60,33 @@ describe('Building Blocks', () => {
         assert.equal(toMiddleIndex('abcde'), 2);
     });
 
-    it('toCenterString', () => {
-        assert.equal(toCenterString('abcd'), 'bacd');
-        assert.equal(toCenterString('abcde'), 'cabde');
-        assert.equal(toCenterString('abcdefg'), 'dabcefg');
+    it('toCenterString odd length', () => {
+        const {start, remain} = toCenterString('abcde');
+        assert.equal(start, 'c');
+        assert.equal(remain, 'abde');
+    });
+
+    it('toCenterString even length', () => {
+        const {start, remain} = toCenterString('abcdef');
+        assert.equal(start, 'c');
+        assert.equal(remain, 'abdef');
+    });
+
+    it('string sort', () => {
+        assert.equal('adbc'.split('').sort().join(''), 'abcd');
+    });
+
+    it('string reverse', () => {
+        assert.equal('abcd'.split('').reverse().join(''), 'dcba');
     });
 });
 
-//describe('MiddlePermutation', () => {
-//    it('runs test case', () => {
-//        assert.equal(middlePermutation('abc'), 'bac');
-//        assert.equal(middlePermutation('abcd'), 'bdca');
-//        assert.equal(middlePermutation('abcdx'), 'cbxda');
-//        assert.equal(middlePermutation('abcdxg'), 'cxgdba');
-//        assert.equal(middlePermutation('abcdxgz'), 'dczxgba');
-//    });   
-//});
+describe('MiddlePermutation', () => {
+    it('runs test case', () => {
+        assert.equal(middlePermutation('abc'), 'bac');
+        assert.equal(middlePermutation('abcd'), 'bdca');
+        assert.equal(middlePermutation('abcdx'), 'cbxda');
+        assert.equal(middlePermutation('abcdxg'), 'cxgdba');
+        assert.equal(middlePermutation('abcdxgz'), 'dczxgba');
+    });   
+});
