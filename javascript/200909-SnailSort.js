@@ -23,8 +23,8 @@ const right = (input, pos) => {
 const toRight = (input, pos) => {
     let result = [];
 
-    let posX = pos[0];
-    let posY = pos[1];
+    let posX = pos[1];
+    let posY = pos[0];
     while(true) {
         if(posX >= input.length) break;
         if(input[posX][posY] === 0) break;
@@ -37,11 +37,35 @@ const toRight = (input, pos) => {
     return result;
 }
 
+const toDown = (input, pos) => {
+    let result = [];
+
+    let posX = pos[1];
+    let posY = pos[0];
+    while(true) {
+        if(posY >= input.length) break;
+        if(input[posX][posY] === 0) break;
+
+        result.push(input[posY][posX]);
+        input[posY][posX] = 0;
+        posY += 1;
+    }
+
+    return result;
+}
+
 describe('Building blocks', () => {
     it('toRight', () => {
         let input = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
-        assert.deepEqual(toRight(input, [1,0]), [2,3]);
+        assert.deepEqual(toRight(input, [0,1]), [2,3]);
     });
+
+    it('toDown', () => {
+        let input = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
+        assert.deepEqual(toDown(input, [1,2]), [6, 9]);
+    });
+
+
 });
 
 /*
