@@ -6,33 +6,32 @@ const assert = require('assert');
 
 
 const snail = (input) => {
-    let result = [input[0][0]];
-    input[0][0] = 0;
-
-    console.log(input);
-
-    return result.concat(right(input, [0,0])); 
+    return [];
 }
 
 const right = (input, pos) => {
-    const result = toRight(input, [pos[0]+1, pos[1]]);
-
-    return result;
+    return toRight(input, pos).concat(down(input, { x: pos.x, y: pos.y+1}));
 }
 
 const toRight = (input, pos) => {
     let result = [];
 
-    let posX = pos[1];
-    let posY = pos[0];
     while(true) {
-        if(posX >= input.length) break;
-        if(input[posX][posY] === 0) break;
+        if(input[pos.y][pos.x] === 0) break;
 
-        result.push(input[posY][posX]);
-        input[posY][posX] = 0;
-        posX += 1;
+        result.push(input[pos.y][pos.x]);
+        input[pos.y][pos.x] = 0;
+
+        if(pos.x+1 >= input.length) break;
+
+        pos.x += 1;
     }
+
+    return result;
+}
+
+const down = (input, pos) => {
+    const result = toDown(input, pos);
 
     return result;
 }
@@ -40,15 +39,14 @@ const toRight = (input, pos) => {
 const toDown = (input, pos) => {
     let result = [];
 
-    let posX = pos[1];
-    let posY = pos[0];
     while(true) {
-        if(posY >= input.length) break;
-        if(input[posX][posY] === 0) break;
+        if(input[pos.x][pos.y] === 0) break;
 
-        result.push(input[posY][posX]);
-        input[posY][posX] = 0;
-        posY += 1;
+        result.push(input[pos.y][pos.x]);
+        input[pos.y][pos.x] = 0;
+
+        if(pos.y+1 >= input.length) break;
+        pos.y += 1;
     }
 
     return result;
@@ -57,15 +55,34 @@ const toDown = (input, pos) => {
 describe('Building blocks', () => {
     it('toRight', () => {
         let input = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
-        assert.deepEqual(toRight(input, [0,1]), [2,3]);
+        let startPos = {
+            x: 0, y: 0
+        };
+
+        const result = toRight(input, startPos);
+        console.log('input: ', input);
+        console.log('pos: ', startPos);
+        
+        assert.deepStrictEqual(result, [1,2,3]);
     });
 
     it('toDown', () => {
         let input = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
-        assert.deepEqual(toDown(input, [1,2]), [6, 9]);
+        let startPos = {
+            x: 2, y: 1
+        };
+
+        assert.deepStrictEqual(toDown(input, startPos), [6,9]);
     });
 
+    it('test right()', () => {
+        let input = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
+        let startPos = {
+            x: 0, y: 0
+        };
 
+        assert.deepStrictEqual(right(input, startPos), [1,2,3,6,9]);
+    });
 });
 
 /*
