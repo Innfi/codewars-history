@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "test": "mocha -r ts-node/register ./201001-DuplicateEncoder.ts"
+  },
   "dependencies": {
     "@types/mocha": "^8.0.3",
     "@types/node": "^14.11.2",
