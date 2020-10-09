@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "mocha -r ts-node/register ./201001-DuplicateEncoder.ts"
+    "test": "mocha -r ts-node/register ./kata-current.ts"
   },
   "dependencies": {
     "@types/mocha": "^8.0.3",
