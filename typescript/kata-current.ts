@@ -1,73 +1,56 @@
 /**
- * https://www.codewars.com/kata/5269452810342858ec000951
+ * https://www.codewars.com/kata/56af1a20509ce5b9b000001e
  */
 
 import assert from 'assert';
 
 
-const isValidCoordinates = (coordinates: string): boolean => {
-    const parsed = coordinates.split(',');
-    const latitude = parseFloat(parsed[0]);
-    if(latitude === NaN) return false;
-    if(latitude < -90 || latitude > 90) return false;
-
-    const longitude = parseFloat(parsed[1]);
-    if(longitude === NaN) return false;
-    if(longitude < -180 || longitude > 180) return false;
-
-    return true;
-}
+const travel = (r: string, zipCode: string): string => 
+{
+    return '';
+};
 
 describe('Building block', () => {
-    const validCoords: string[] = [
-      "-23, 25",
-      "4, -3",
-      "24.53525235, 23.45235",
-      "04, -23.234235",
-      "43.91343345, 143"
-    ];
+    const ad = "123 Main Street St. Louisville OH 43071,432 Main Long Road St. Louisville OH 43071,786 High Street Pollocksville NY 56432,54 Holy Grail Street Niagara Town ZP 32908,3200 Main Rd. Bern AE 56210,1 Gordon St. Atlanta RE 13000,"
+      + "10 Pussy Cat Rd. Chicago EX 34342,10 Gordon St. Atlanta RE 13000,58 Gordon Road Atlanta RE 13000,"
+      + "22 Tokyo Av. Tedmondville SW 43098,674 Paris bd. Abbeville AA 45521,10 Surta Alley Goodtown GG 30654,"
+      + "45 Holy Grail Al. Niagara Town ZP 32908,320 Main Al. Bern AE 56210,14 Gordon Park Atlanta RE 13000,"
+      + "100 Pussy Cat Rd. Chicago EX 34342,2 Gordon St. Atlanta RE 13000,5 Gordon Road Atlanta RE 13000,"
+      + "2200 Tokyo Av. Tedmondville SW 43098,67 Paris St. Abbeville AA 45521,11 Surta Avenue Goodtown GG 30654,"
+      + "45 Holy Grail Al. Niagara Town ZP 32918,320 Main Al. Bern AE 56215,14 Gordon Park Atlanta RE 13200,"
+      + "100 Pussy Cat Rd. Chicago EX 34345,2 Gordon St. Atlanta RE 13222,5 Gordon Road Atlanta RE 13001,"
+      + "2200 Tokyo Av. Tedmondville SW 43198,67 Paris St. Abbeville AA 45522,11 Surta Avenue Goodville GG 30655,"
+      + "2222 Tokyo Av. Tedmondville SW 43198,670 Paris St. Abbeville AA 45522,114 Surta Avenue Goodville GG 30655,"
+      + "2 Holy Grail Street Niagara Town ZP 32908,3 Main Rd. Bern AE 56210,77 Gordon St. Atlanta RE 13000";
 
-    it('splits input', () => {
-        const coords = validCoords[0].trim();
-        const result = coords.split(',');
-        assert.strictEqual(parseFloat(result[0]), -23);
-        assert.strictEqual(parseFloat(result[1]), 25);
+    it('string split', () => {
+        const addrs = ad.split(',');
+
+        assert.strictEqual(addrs[0], '123 Main Street St. Louisville OH 43071');
     });
 
-    it('parsefloat fails with alphabet letter', () => {
-        assert.strictEqual(parseFloat('N23.43345'), NaN);
+    it('find with zip code', () => {
+        const regExp = ',{1}.+EX 34342,{1}';
+
+        const result = ad.match(regExp);
+        assert.strictEqual(result != null, true);
+
+        assert.strictEqual(result[0], '100 Pussy Cat Rd. Chicago EX 34342');
     });
 });
 
-describe('CoordValidator', () => {
-    it('test with valid cases', () => {
-        var ValidCoordinates = [
-          "-23, 25",
-          "4, -3",
-          "24.53525235, 23.45235",
-          "04, -23.234235",
-          "43.91343345, 143"
-        ];
+describe('Salesmans travel', () => {
+    const ad = "123 Main Street St. Louisville OH 43071,432 Main Long Road St. Louisville OH 43071,786 High Street Pollocksville NY 56432,"
+      + "54 Holy Grail Street Niagara Town ZP 32908,3200 Main Rd. Bern AE 56210,1 Gordon St. Atlanta RE 13000,"
+      + "10 Pussy Cat Rd. Chicago EX 34342,10 Gordon St. Atlanta RE 13000,58 Gordon Road Atlanta RE 13000,"
+      + "22 Tokyo Av. Tedmondville SW 43098,674 Paris bd. Abbeville AA 45521,10 Surta Alley Goodtown GG 30654,"
+      + "45 Holy Grail Al. Niagara Town ZP 32908,320 Main Al. Bern AE 56210,14 Gordon Park Atlanta RE 13000,"
+      + "100 Pussy Cat Rd. Chicago EX 34342,2 Gordon St. Atlanta RE 13000,5 Gordon Road Atlanta RE 13000,"
+      + "2200 Tokyo Av. Tedmondville SW 43098,67 Paris St. Abbeville AA 45521,11 Surta Avenue Goodtown GG 30654,"
+      + "45 Holy Grail Al. Niagara Town ZP 32918,320 Main Al. Bern AE 56215,14 Gordon Park Atlanta RE 13200,"
+      + "100 Pussy Cat Rd. Chicago EX 34345,2 Gordon St. Atlanta RE 13222,5 Gordon Road Atlanta RE 13001,"
+      + "2200 Tokyo Av. Tedmondville SW 43198,67 Paris St. Abbeville AA 45522,11 Surta Avenue Goodville GG 30655,"
+      + "2222 Tokyo Av. Tedmondville SW 43198,670 Paris St. Abbeville AA 45522,114 Surta Avenue Goodville GG 30655,"
+      + "2 Holy Grail Street Niagara Town ZP 32908,3 Main Rd. Bern AE 56210,77 Gordon St. Atlanta RE 13000";
 
-        ValidCoordinates.forEach((coord) => {
-            assert.strictEqual(isValidCoordinates(coord), true);
-        });
-    });
-
-    it('test with invalid cases', () => {
-       var InvalidCoordinates = [
-          "23.234, - 23.4234",
-          "2342.43536, 34.324236",
-          "N23.43345, E32.6457",
-          "99.234, 12.324",
-          "6.325624, 43.34345.345",
-          "0, 1,2",
-          "0.342q0832, 1.2324",
-          "23.245, 1e1"
-        ];
-
-        InvalidCoordinates.forEach((coord) => {
-            assert.strictEqual(isValidCoordinates(coord), false);
-        });
-    });
 });
