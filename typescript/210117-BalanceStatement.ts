@@ -34,7 +34,7 @@ const balanceStatements = (input: string): string => {
     input.split(', ')
     .forEach((value: string) => {
         if(!regex.test(value)) {
-            invalidOrder.push(value + ' ;');
+            if(value.length >= 1) invalidOrder.push(value + ' ;');
         } else {
             const parsed: string[] = value.split(' ');
             const delta: number = 
