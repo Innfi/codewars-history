@@ -1,59 +1,69 @@
 //https://www.codewars.com/kata/5208f99aee097e6552000148
 
+/*
+best practices: 
+
+fn solution(s: &str) -> String {
+    let mut res = String::new();
+    for c in s.chars() {
+        if c.is_uppercase() {
+            res.push(' ');
+        }
+        res.push(c);
+    }
+    res
+}
+*/
+
 #[cfg(test)]
 mod tests {
-    use regex::Regex;
-    use std::collections::HashSet;
+    use substring::Substring;
 
-    // fn solution(s: &str) -> String {
-    //     String::from("test")
-    // }
+    fn solution(s: &str) -> String {
+        let matches: Vec<(usize, &str)> = 
+            s.match_indices(|c: char| c.is_ascii_uppercase()).collect();
+        let mut output: String = String::from("");
+        let mut index_start = 0;
 
-    #[test]
-    fn find_uppercase() {
-        let input: &str = "camelCaseInput";
-
-        let splitted: Vec<&str> = 
-            Regex::new(r"\p{Lu}").unwrap().split(input).collect();
-        splitted.into_iter().for_each(|token| {
-            println!("token: {}", token);
+        matches.into_iter().for_each(|(index, _token)| {
+            output.push_str(" ");
+            output.push_str(  &s[index_start..index]  );
+            index_start = index;
         });
-        
-        assert_eq!(3, 3);
+
+        output.push_str(" ");
+        output.push_str(&s[index_start..s.len()]);
+
+        String::from(output.trim_start())
     }
 
     #[test]
-    fn regex_replace_all() {
-        let input: &str = "camelCaseInput";
-        let regex_upper: Regex = Regex::new(r"\p{Lu}").unwrap();
+    fn test_vector() {
+        let input: &str = "camelCaseWordsHere";
+        let input_string: String = String::from(input);
+        let result: Vec<(usize, &str)> = 
+            input_string.match_indices(|c: char| c.is_ascii_uppercase()).collect();
 
-        let result: String = regex_upper.replace_all(input, "*").to_string();
+        let mut output: String = String::from("");
+        let mut start = 0;
+        
+        let iters = result.into_iter();
+        iters.for_each(|(index, _token)| {
+            output.push_str(" ");
+            output.push_str(input_string.substring(start, index));
+            start = index;  
+        });
 
-        assert_eq!(*result, String::from("camel*ase*nput"));
+        output.push_str(" ");
+        output.push_str(input_string.substring(start, input_string.len()));
+        let output_string: String = String::from(output.trim_start());
+
+        assert_eq!(output_string, String::from("camel Case Words Here"));
     }
 
     #[test]
-    fn regex_find_iter() {
-        let input: &str = "CamelCaseInput";
-        let regex_upper: Regex = Regex::new(r"\p{Lu}[a-z]+").unwrap();
-
-        //let hash_map: HashSet<&str> = 
-        
-        let fmt_test = format!("test {}", 1);
-
-        let result = regex_upper.find_iter(input)
-            .map(|token| token.as_str())
-            .reduce(|a, b| {
-                //format!("{} {}", a, b)
-                [a, b].join(" ")
-            }).unwrap();
-
-        assert_eq!(result, "Camel Case Input");
+    fn test_solution() {
+        assert_eq!(solution("camelCasing"), "camel Casing");
+        assert_eq!(solution("camelCasingTest"), "camel Casing Test");
     }
-
-    // #[test]
-    // fn test_solution() {
-    //     assert_eq!(solution("camelCasing"), "camel Casing");
-    //     assert_eq!(solution("camelCasingTest"), "camel Casing Test");
-    // }
 }
