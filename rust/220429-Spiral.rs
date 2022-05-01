@@ -1,4 +1,29 @@
-//https://www.codewars.com/kata/5104e01fbbb17187c7e0000c6
+//https://www.codewars.com/kata/534e01fbbb17187c7e0000c6
+
+/*
+fn spiralize(size: usize) -> Vec<Vec<i8>> {
+    let mut spiral = vec![vec![0; size]; size];
+    let mut value = 1;
+    
+    for j in 0..(size + 1) / 2 {
+        for i in j..(size - j) {
+            spiral[i][j] = value;
+            spiral[j][i] = value;
+
+            spiral[i][size - 1 - j] = value;
+            spiral[size - 1 - j][i] = value;
+        }
+
+        value = (value + 1) % 2;
+        
+        if j < (size - 1) / 2 || spiral[j][j - 1] == 1 {
+            spiral[j + 1][j] = value;
+        }
+    }
+
+    spiral
+}
+*/
 
 #[cfg(test)]
 mod tests {
@@ -35,7 +60,7 @@ mod tests {
         len: usize) {
 
         let mut temp = 0;
-        for i in 0..len {
+        for i in *y..len {
             if i+1 <= len-1 && array_2d[i+1][*x] == 1 { break; }
             
             array_2d[i][*x] = 1;
@@ -53,8 +78,7 @@ mod tests {
 
         let mut temp = 0;
         for i in 0..len {
-            //println!("x: {}", *x-i);
-            //if *x-i-2 > 1 && array_2d[*y][*x-i-1] == 1 { break; }
+            if *x-i >= 1 && array_2d[*y][*x-i-1] == 1 { break; }
 
             array_2d[*y][*x-i] = 1;
 
@@ -79,7 +103,6 @@ mod tests {
         }
 
         *y = temp;
-        println!("y: {}", *y);
     }
 
     #[test]
@@ -93,25 +116,25 @@ mod tests {
         mark_down(&mut array_2d, &mut x, &mut y, len);
         mark_left(&mut array_2d, &mut x, &mut y, len);
         mark_up(&mut array_2d, &mut x, &mut y, len);
+
+        mark_right(&mut array_2d, &mut x, &mut y, len);
+        mark_down(&mut array_2d, &mut x, &mut y, len);
+        mark_left(&mut array_2d, &mut x, &mut y, len);
+        mark_up(&mut array_2d, &mut x, &mut y, len);
         
-        // mark_up(&mut array_2d, &mut x, &mut y, len);
-        // mark_right(&mut array_2d, &mut x, &mut y, len);
-        // mark_down(&mut array_2d, &mut x, &mut y, len);
-        // mark_left(&mut array_2d, &mut x, &mut y, len);
-        // println!("x: {}, y: {}", x, y);
         
         assert_eq!(array_2d.len(), 10);
 
-        array_2d.into_iter().for_each(|x: Vec<i8>| {
-            x.into_iter().for_each(|e| {
-                print!("{} ", e);
-            });
-            println!("");
-        });
+        // array_2d.into_iter().for_each(|x: Vec<i8>| {
+        //     x.into_iter().for_each(|e| {
+        //         print!("{} ", e);
+        //     });
+        //     println!("");
+        // });
     }
 
     // fn spiralize(size: usize) -> Vec<Vec<i8>> {
-    //     unimplemented!();
+
     // }
 
     // #[test]
