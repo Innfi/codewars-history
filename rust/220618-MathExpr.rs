@@ -52,18 +52,11 @@ mod tests {
         assert_eq!(token_vec, expected_result);
     }
 
-    struct ParseResult {
-        ops: Vec<char>,
-        numbers: Vec<f64>,
-    }
-
-    fn parse_expr(expr: &str) -> ParseResult {
-        let mut ops_vec: Vec<char> = Vec::new();
-        let mut numbers_vec: Vec<f64> = Vec::new();
-
+    fn to_vec(expr: &str) -> Vec<String> {
         let mut partial_numbers: Vec<char> = Vec::new();
+        let mut result_vec: Vec<String> = Vec::new();
 
-        let input_vec:Vec<char> = expr.chars().collect();
+        let input_vec: Vec<char> = expr.chars().collect();
         input_vec.iter().enumerate().for_each(|(index, x)| {
             if x.is_digit(10) || x == &'.' {
                 partial_numbers.push(*x);
@@ -75,32 +68,95 @@ mod tests {
 
                 if !partial_numbers.is_empty() {
                     let number_string: String = partial_numbers.iter().collect();
-                    let to_number: f64 = number_string.parse().unwrap();
-                    numbers_vec.push(to_number);
-
                     partial_numbers.clear();
+                    result_vec.push(number_string);
                 }
 
-                if x != &' ' { ops_vec.push(*x); }
+                if *x != ' ' { 
+                    result_vec.push(format!("{}", *x)); 
+                }
             }
         });
 
-        if !partial_numbers.is_empty() {
-            let number_string: String = partial_numbers.iter().collect();
-            let to_number: f64 = number_string.parse().unwrap();
-            numbers_vec.push(to_number);
+        if partial_numbers.is_empty() { return result_vec; }
 
-            partial_numbers.clear();
-        }
+        let number_string: String = partial_numbers.iter().collect();
+        partial_numbers.clear();
+        result_vec.push(number_string);
 
-        ParseResult {
-            ops: ops_vec,
-            numbers: numbers_vec,
-        }
+        result_vec
     }
 
+    #[test]
+    fn test_to_vec() {
+        let expr: &str = "2.1 * (1.5+(-3.4)) - 4.1";
+        let expected_result = vec![
+            String::from("2.1"),
+            String::from("*"),
+            String::from("("),
+            String::from("1.5"),
+            String::from("+"),
+            String::from("("),
+            String::from("-3.4"),
+            String::from(")"),
+            String::from(")"),
+            String::from("-"),
+            String::from("4.1"),
+        ];
+
+        assert_eq!(to_vec(expr), expected_result);
+    }
+
+    fn to_rpn(input: &Vec<String>) -> Vec<String> {
+
+    }
+
+    #[test]
+    fn test_to_rpn() {
+        let input: Vec<String> = vec![
+            String::from("2.1"),
+            String::from("*"),
+            String::from("("),
+            String::from("1.5"),
+            String::from("+"),
+            String::from("("),
+            String::from("-3.4"),
+            String::from(")"),
+            String::from(")"),
+            String::from("-"),
+            String::from("4.1"),
+        ];
+        let expected_result: Vec<String> = vec![
+            String::from("2.1"),
+            String::from("1.5"),
+            String::from("-3.4"),
+            String::from("+"),
+            String::from("*"),
+            String::from("4.1"),
+            String::from("-"),
+        ];
+
+        assert_eq!(to_rpn(&input), expected_result);
+    }
+
+    // fn vec_to_number(partial_numbers: & mut Vec<char>) -> f64 {
+    //     let number_string: String = partial_numbers.iter().collect();
+    //     partial_numbers.clear();
+
+    //     number_string.parse().unwrap()
+    // }
+
+    // fn calculate(lhs: f64, rhs: f64, ops: char) -> f64 {
+    //     match ops {
+    //         '+' => { return lhs + rhs; },
+    //         '-' => { return lhs - rhs; },
+    //         '*' => { return lhs * rhs; },
+    //         '/' => { return lhs / rhs; },
+    //         _ => { return 0.0; }
+    //     }
+    // }
     // fn calc(expr: &str) -> f64 {
-        
+    //     todo!();
     // }
 
     // macro_rules! assert_expr_eq {
