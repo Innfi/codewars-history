@@ -3,14 +3,12 @@
 package codewars_history
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func Beeramid(bonus int, price float64) int {
-	fmt.Printf("bonus: %d, price: %f\n", bonus, price)
 	if bonus < 0 {
 		return 0
 	}
