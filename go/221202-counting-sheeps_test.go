@@ -18,5 +18,5 @@ func CountSheeps(numbers []bool) int {
 }
 
 func TestCountingSheeps(t *testing.T) {
-	assert.Equal(t, CountSheeps([]bool{true, false}), 0)
+	assert.Equal(t, CountSheeps([]bool{true, false}), 1)
 }
