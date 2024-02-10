@@ -5,6 +5,7 @@ package codewars_history
 import (
 	"fmt"
 	"regexp"
+	"sort"
 	"strings"
 	"testing"
 
@@ -12,12 +13,22 @@ import (
 )
 
 func DeadAntCount(ants string) int {
-	withoutAnts := strings.Replace(ants, "ant", " ", -1)
-	reg := regexp.MustCompile(`[a|n|t]+`)
+	debris := strings.Replace(ants, "ant", " ", -1)
 
-	debris := reg.FindAllString(withoutAnts, -1)
-	fmt.Println("debris: ", debris)
-	return len(debris)
+	array := []int{
+		strings.Count(debris, "a"),
+		strings.Count(debris, "n"),
+		strings.Count(debris, "t"),
+	}
+	sort.Ints(array)
+
+	return array[len(array)-1]
+	// withoutAnts := strings.Replace(ants, "ant", " ", -1)
+	// reg := regexp.MustCompile(`[a|n|t]+`)
+
+	// debris := reg.FindAllString(withoutAnts, -1)
+	// fmt.Println("debris: ", debris)
+	// return len(debris)
 }
 
 func TestInit(t *testing.T) {

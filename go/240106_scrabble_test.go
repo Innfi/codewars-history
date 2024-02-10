@@ -5,6 +5,8 @@ package codewars_history
 import "strings"
 
 func ScrabbleScore(st string) int {
+	DictScores := make(map[string]int)
+
 	sum := 0
 	for _, elem := range strings.ToUpper(st) {
 		sum += DictScores[string(elem)]
