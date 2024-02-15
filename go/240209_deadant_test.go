@@ -3,7 +3,6 @@
 package codewars_history
 
 import (
-	"fmt"
 	"regexp"
 	"sort"
 	"strings"
@@ -32,8 +31,6 @@ func DeadAntCount(ants string) int {
 }
 
 func TestInit(t *testing.T) {
-	fmt.Println("testinit")
-
 	input := "ant anantt aantnt"
 	output := strings.Replace(input, "ant", " ", -1)
 	assert.Equal(t, output, "  an t a nt")
@@ -43,9 +40,6 @@ func TestInit(t *testing.T) {
 	assert.Equal(t, afterRegex, " an t a nt")
 
 	splitted := strings.Split(afterRegex, " ")
-	for _, elem := range splitted {
-		fmt.Println("elem: ", elem)
-	}
 
 	assert.Equal(t, len(splitted), 5)
 }
