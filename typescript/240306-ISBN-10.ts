@@ -16,6 +16,14 @@ describe('test', () => {
     } catch (_) { return false; }
   }
 
+  function valid2(isbn: string): boolean {
+    return !/^[0-9]{9}[0-9X]$/.test(isbn) ? 
+      false : 
+      isbn.split('').map((value: string, index: number) => 
+        value === 'X' ? 10 * (index+1) : Number.parseInt(value)*(index+1)
+      ).reduce((a, b) => a+b, 0) % 11 === 0;
+  }
+
   it ('basic cases', () => {
     const sampleTests: [string, boolean][] = [
       ["1112223339" ,true ],
@@ -30,6 +38,6 @@ describe('test', () => {
       ["048665088XZ",false]
     ];
 
-    sampleTests.forEach((v) => assert.strictEqual(validISBN10(v[0]), v[1]));
+    sampleTests.forEach((v) => assert.strictEqual(valid2(v[0]), v[1]));
   });
 });
