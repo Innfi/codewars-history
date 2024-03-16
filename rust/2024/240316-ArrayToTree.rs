@@ -12,7 +12,10 @@ fn to_tree_from(xs: &[i32], i: usize) -> Option<TreeNode> {
         right: to_tree_from(xs, 2 * i + 2).map(Box::new),
     })
 }
- */
+
+other reference: https://gist.github.com/aidanhs/5ac9088ca0f6bdd4a370
+
+*/
 
 #[derive(Debug, PartialEq)]
 pub struct TreeNode {
